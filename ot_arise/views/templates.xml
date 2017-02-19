@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- vim:fdn=3:
+-->
+<openerp>
+	<data>
+
+		<!-- Change Favicon -->
+		<template id="ot_favicon" inherit_id="web.layout" name="OT Favicon">
+			<xpath expr="//link[@type='image/x-icon']" position="attributes">
+				<attribute name="t-att-href">'/ot_arise/static/src/img/favicon.ico'</attribute>
+			</xpath>
+		</template>
+
+		<!-- Insert CSS & Javascript -->
+		<template id="ot_assets_frontend" inherit_id="website.assets_frontend" name="OT Assets">
+			<xpath expr="." position="inside">
+				<link rel="stylesheet" href="/ot_arise/static/src/css/style.css"/>
+				<script type="text/javascript" src="/ot_arise/static/src/js/script.js"/>
+				<link rel='stylesheet' href="/ot_arise/static/src/jquery.ui/jquery-ui.css"/>
+				<script type="text/javascript" src="/ot_arise/static/src/jquery.ui/jquery-ui.js"></script>
+			</xpath>
+		</template>
+
+		<!-- Change Logo -->
+		<template id="website.layout_logo_show" inherit_id="website.layout" customize_show="True" name="Show Logo">
+			<xpath expr="//header//a[@class='navbar-brand']" position="replace">
+				<a href="/" class="navbar-brand logo">
+					<img src="/ot_arise/static/src/img/logo-grey.png" t-att-alt="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+				</a>
+			</xpath>
+		</template>
+
+		<!-- Change Main Layout -->
+		<template id="ot_layout" inherit_id="website.layout" name="OT Layout" priority="1">
+			<xpath expr="//div[@class='navbar navbar-default navbar-static-top']" position="before">
+				<div class="ot-top-header">
+					<div class="container">
+						<div class="ot-top-info"><i class="fa fa-phone"/> <span t-field="res_company.phone"/></div>
+						<div class="ot-top-info"><i class="fa fa-envelope"/> <span t-field="res_company.email"/></div>
+					</div>
+				</div>
+			</xpath>
+		</template>
+
+		<!-- Fixed Header -->
+		<template id="ot_fixed_header" inherit_id="website.layout" name="OT Fixed Header" customize_show="True" priority="2">
+			<xpath expr="//div[@class='navbar navbar-default navbar-static-top']" position="attributes">
+				<attribute name="class">navbar navbar-default navbar-static-top ot-fixed-header</attribute>
+			</xpath>
+		</template>
+
+		<!-- Subscribe -->
+		<template id="ot_subscribe_btn" inherit_id="website.layout" name="OT Subscribe Button" customize_show="True">
+			<xpath expr="//ul[@id='top_menu']" position="attributes">
+				<attribute name="class">nav navbar-nav</attribute>
+			</xpath>
+			<xpath expr="//ul[@id='top_menu']" position="after">
+				<div class="hidden-lg clearfix"/>
+				<a href="#" class="ot-subscribe-btn mt8 mb8"><i class="fa fa-pencil"/> SUBSCRIBE NOW</a>
+			</xpath>
+		</template>
+
+		<!-- Modal Subscribe -->
+		<template id="ot_subscribe_modal" name="OT Subscribe Modal">
+			<div class="modal ot-subscribe-modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+							<h4 class="modal-title text-center" id="myModalLabel">SUBSCRIPTION</h4>
+						</div>
+						<div class="modal-body text-center">
+							<form action="#" name="subscribe" id="ot-subscribe-form" method="POST">
+								<input type="email" required="1" name="email" id="ot-subscribe-email" placeholder="Enter Your E-Mail"/>
+								<input type="submit" name="submit" value="Subscribe"/>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+
+		<!-- Subscribe Confirm -->
+		<template id="ot_subscribe_confirm" name="OT Subscribe Confirm">
+			<div class="modal ot-subscribe-confirm fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-body text-center">
+							<t t-if="is_error">
+								<div>Email has already been submited before.</div>
+							</t>
+
+							<t t-if="not is_error">
+								<div>Your email has been submited.</div>
+							</t>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+
+		<!-- Homepage -->
+		<template id="website.homepage" name="Homepage">
+			<t t-call="website.layout">
+				<div id="wrap">
+					<div class="oe_structure"/>
+
+					<div class="carousel slide" id="ot-main-slider">
+						<ol class="carousel-indicators hidden-xs">
+							<li class="active" data-slide-to="0" data-target="#ot-main-slider"/>
+							<li data-slide-to="1" data-target="#ot-main-slider"/>
+						</ol>
+						<!-- <hr class="transition-timer-carousel-progress-bar" /> -->
+						<div class="carousel-inner" role="listbox">
+							<div class="item active">
+								<a href="/">
+									<img src="/ot_arise/static/src/img/slide-1.jpg" alt="OT Slide"/>
+								</a>
+							</div>
+							<div class="item">
+								<a href="/">
+									<img src="/ot_arise/static/src/img/slide-blank.png" alt="OT Blank Slide"/>
+								</a>
+							</div>
+						</div>
+				
+						<div class="carousel-control left" data-slide="prev" data-target="#ot-main-slider" href="#ot-main-slider" style="width: 10%">
+							<i class="fa fa-chevron-left"/>
+						</div>
+						<div class="carousel-control right" data-slide="next" data-target="#ot-main-slider" href="#ot-main-slider" style="width: 10%">
+							<i class="fa fa-chevron-right"/>
+						</div>
+					</div>
+
+					<div class="oe_structure"/>
+
+					<div class="ot-welcome text-center">
+						<div class="container">
+							<!--<ul class="ot-process-img list-inline">
+								<li>
+									<img src="/ot_arise/static/src/img/process-1.jpg" alt="OT Process 1" class="img img-responsive"/>
+								</li>
+								<li>
+									<img src="/ot_arise/static/src/img/process-2.jpg" alt="OT Process 2" class="img img-responsive"/>
+								</li>
+								<li>
+									<img src="/ot_arise/static/src/img/process-3.jpg" alt="OT Process 3" class="img img-responsive"/>
+								</li>
+							</ul>-->
+							<div class="text-center">
+								<h1>WELCOME</h1>
+								<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+							</div>
+							<ul class="list-inline mt8 mb8">
+								<li>
+									<img src="/ot_arise/static/src/img/adv-1.png" alt="OT Advantages 1" class="img img-responsive"/>
+									<div class="mt8"><strong>INNOVATIONS</strong></div>
+								</li>
+								<li>
+									<img src="/ot_arise/static/src/img/adv-2.png" alt="OT Advantages 2" class="img img-responsive"/>
+									<div class="mt8"><strong>PERFORMANCE</strong></div>
+								</li>
+								<li>
+									<img src="/ot_arise/static/src/img/adv-3.png" alt="OT Advantages 3" class="img img-responsive"/>
+									<div class="mt8"><strong>RESEARCH</strong></div>
+								</li>
+								<li>
+									<img src="/ot_arise/static/src/img/adv-4.png" alt="OT Advantages 4" class="img img-responsive"/>
+									<div class="mt8"><strong>SOLUTIONS</strong></div>
+								</li>
+								<li>
+									<img src="/ot_arise/static/src/img/adv-5.png" alt="OT Advantages 5" class="img img-responsive"/>
+									<div class="mt8"><strong>DEVELOPMENT</strong></div>
+								</li>
+							</ul>
+
+							<div class="ot-welcome-msg mt8 mb8">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+							</div>
+
+							<div>
+								<a class="btn btn-primary" href="#">MORE</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="oe_structure"/>
+
+					<div class="ot-banner-1">
+						<div class="container">
+							<div class="ot-container-bg text-center col-lg-offset-6 col-md-offset-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<h1>WE PROVIDE</h1>
+								<div class="mb8">Innovative and Cost-effective Industrial Solutions</div>
+								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mt8">
+									<img src="/ot_arise/static/src/img/banner-icon-1.png" class="img img-responsive ot-image-center" alt="OT Banner Icon 1"/>
+									<div class="mt8">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</div>
+								</div>
+								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mt8">
+									<img src="/ot_arise/static/src/img/banner-icon-2.png" class="img img-responsive ot-image-center" alt="OT Banner Icon 2"/>
+									<div class="mt8">Ut enim ad minim veniam, quis nostrud exercitation deserunt mollit anim.</div>
+								</div>
+								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mt8">
+									<img src="/ot_arise/static/src/img/banner-icon-3.png" class="img img-responsive ot-image-center" alt="OT Banner Icon 3"/>
+									<div class="mt8">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="oe_structure"/>
+
+					<div class="ot-banner-2">
+						<div class="container">
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<h1>
+									PERFECT <br/>
+									EXPERIRENCE <br/>
+									HIGH QUALITY SERVICE
+								</h1>
+								<a href="#" class="btn btn-primary">MORE</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="oe_structure"/>
+
+					<div class="ot-banner-3">
+						<div class="container">
+							<div class="col-lg-8 col-md-6 col-sm-6 col-xs-12 mb8 ot-reduce-rp">
+								<div class="ot-banner-bg-1">
+									<h1>
+										SAVE YOUR <br/>
+										MONEY
+									</h1>
+								</div>
+							</div>
+							<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 mb8 ot-reduce-lp">
+								<div class="ot-banner-solid">
+									<img src="/ot_arise/static/src/img/banner-icon-4.png" class="img img-responsive ot-image-center" alt="OT Banner Icon 4"/>
+									<div class="mt8">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</div>
+								</div>
+							</div>
+
+							<div class="clearfix"/>
+
+							<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 mt8 ot-reduce-rp">
+								<div class="ot-banner-solid">
+									<img src="/ot_arise/static/src/img/banner-icon-5.png" class="img img-responsive ot-image-center" alt="OT Banner Icon 5"/>
+									<div class="mt8">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</div>
+								</div>
+							</div>
+							<div class="col-lg-8 col-md-6 col-sm-6 col-xs-12 mt8 ot-reduce-lp">
+								<div class="ot-banner-bg-2">
+									<h1>
+										PRO <br/>
+										TECHNOLOGY
+									</h1>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="oe_structure"/>
+				</div>
+			</t>
+		</template>
+
+		<!-- Footer -->
+		<template id="website.footer_default" inherit_id="website.footer_custom" customize_show="True" name="Automatic Footer">
+			<xpath expr="//div[@id='footer']" position="replace">
+				<div id="footer" class="ot-footer">
+					<div class="ot-footer-block text-center">
+						<div class="container">
+							<h1>WE DO A LOT!</h1>
+							<h3>BUILDING, POWERING, MOVING AND CURING THE WORLD</h3>
+							<a href="#" class="btn btn-primary mt16">MORE</a>
+						</div>
+					</div>
+
+					<div class="ot-footer-content">
+						<div class="container">
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+								<img src="/ot_arise/static/src/img/logo.png" class="img img-responsive ot-footer-logo ot-image-center" alt="OT Footer Logo"/>
+								<ul class="list-inline text-center mt16">
+									<li>
+										<a href="#">
+											<img src="/ot_arise/static/src/img/facebook.png" class="img img-responsive" alt="Facebook"/>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<img src="/ot_arise/static/src/img/instagram.png" class="img img-responsive" alt="Instagram"/>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<img src="/ot_arise/static/src/img/twitter.png" class="img img-responsive" alt="Twitter"/>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<img src="/ot_arise/static/src/img/google-plus.png" class="img img-responsive" alt="Google Plus"/>
+										</a>
+									</li>
+								</ul>
+							</div>
+
+							<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+								<ul class="nav navbar-nav">
+									<li><a href="#">HOME</a></li>
+									<li><a href="#">FAQS</a></li>
+									<li><a href="#">BLOG</a></li>
+									<li><a href="#">SERVICES</a></li>
+									<li><a href="#">ABOUT US</a></li>
+									<li><a href="#">CONTACT US</a></li>
+								</ul>
+
+								<div class="clearfix"/>
+
+								<div class="mt8">
+									Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</xpath>
+		</template>
+
+		<!-- Copyright -->
+		<template id="website.layout_footer_copyright" inherit_id="website.layout" name="Footer Copyright">
+			<xpath expr="//footer" position="inside">
+				<div class="ot-copyright">
+					<div class="container text-center">
+						Copyright &amp;copy; 2016. <span t-field="res_company.name"/>. All Right Reserved. Made With <img src="/ot_arise/static/src/img/logo.png" class="img img-responsive"/>
+					</div>
+				</div>
+			</xpath>
+		</template>
+	</data>
+</openerp>

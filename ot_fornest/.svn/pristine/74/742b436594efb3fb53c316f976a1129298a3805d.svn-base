@@ -1,0 +1,85 @@
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan">Responsive</h2>
+        </div>
+        <div class="oe_span6">
+            <div class="oe_demo oe_picture oe_screenshot">
+                <img src="responsive.png" class="img img-responsive">
+            </div>
+        </div>
+        <div class="oe_span4">
+            <p class="oe_mt32">
+Your Odoo site will be fully responsive and quickly adapt to any gadget and screen size.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Ajax Add to Cart </h2>
+        <div class="oe_span4">
+            <p class="oe_mt32">
+Say goodbye to ugly odoo add to cart paging. Your odoo template will add your customer selected item beautifully via ajax.
+            </p>
+        </div>
+        <div class="oe_span6">
+            <div class="oe_row_img oe_centered">
+                <img class="img img-responsive" src="ajax1.png">
+            </div>
+        </div>
+    </div>
+</section>  
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan">Ajax Cart List</h2>
+        </div>
+        <div class="oe_span4">
+            <div class="oe_demo oe_picture oe_screenshot">
+                <img class="img img-responsive" src="ajax2.png">
+            </div>
+        </div>
+        <div class="oe_span6">
+            <p class="oe_mt32">
+No need to change page to view cart. Fornest enable the cart viewing in ajax 
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Ajax Variant Listing</h2>
+        <div class="oe_span4">
+            <p class="oe_mt32">
+Elegant ajax variant choosing when user choosing the product.
+            </p>
+        </div>
+        <div class="oe_span6">
+            <div class="oe_row_img oe_centered">
+                <img class="img img-responsive" src="ajaxvariant.png">
+            </div>
+        </div>
+    </div>
+</section> 
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan">Elegant Single Product and Multi Image</h2>
+        </div>
+        <div class="oe_span6">
+            <div class="oe_demo oe_picture oe_screenshot">
+                <img class="img img-responsive" src="single.png">
+            </div>
+        </div>
+        <div class="oe_span4">
+            <p class="oe_mt32">
+Single product are built beautifully in Fornest. Multi images is available via ajax with beautiful animation.
+            </p>
+        </div>
+    </div>
+</section>

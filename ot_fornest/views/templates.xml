@@ -1,0 +1,1046 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- vim:fdn=3:
+-->
+<openerp>
+	<data>
+
+		<!-- OT Remarks - Move jQuery UI no longer exist in v9  -->
+		<!-- <template id="ot_assets_editor" inherit_id="website.assets_editor" name="OT Assets Editor">
+			<xpath expr="//link[@href='/web/static/lib/jquery.ui/css/smoothness/jquery-ui-1.9.1.custom.css']" position="replace"/>
+			<xpath expr="//t[@t-call='web.jqueryui_conflict']" position="replace"/>
+		</template> -->
+
+		<!-- Change Favicon -->
+		<template id="ot_favicon" inherit_id="web.layout" name="OT Favicon">
+			<xpath expr="//link[@type='image/x-icon']" position="attributes">
+				<attribute name="t-att-href">'/ot_fornest/static/src/img/favicon.ico'</attribute>
+			</xpath>
+		</template>
+
+		<!-- Insert CSS & Javascript -->
+		<!-- OT Remarks - Jqueryui location already change -->
+		<template id="ot_assets_frontend" inherit_id="website_sale.assets_frontend" name="OT Assets">
+			<xpath expr="." position="inside">
+				<link rel='stylesheet' href="/ot_fornest/static/src/jquery.ui/jquery-ui.css"/>
+				<link rel="stylesheet" href="/ot_fornest/static/src/css/jquery.bxslider.css"/>
+				<link rel="stylesheet" href="/ot_fornest/static/src/css/style.css"/>
+				<script type="text/javascript" src="/ot_fornest/static/src/js/jquery.bxslider.js"/>
+				<script type="text/javascript" src="/ot_fornest/static/src/jquery.ui/jquery-ui.js"></script>
+				<!-- <t t-call="web.jqueryui_conflict">
+					<script type="text/javascript" src="/web/static/lib/jquery.ui/jquery-ui.js"></script>
+				</t> -->
+			</xpath>
+		</template>
+
+		<!-- Insert Custom Script After website_sale.js -->
+		<template id="ot_ws_assets_frontend" inherit_id="website_sale.assets_frontend" name="OT WS Assets">
+			<xpath expr="." position="inside">
+				<script type="text/javascript" src="/ot_fornest/static/src/js/script.js"/>
+			</xpath>
+		</template>
+
+		<!-- Change Logo -->
+		<template id="website.layout_logo_show" inherit_id="website.layout" customize_show="True" name="Show Logo">
+			<xpath expr="//header//a[@class='navbar-brand']" position="replace">
+				<a href="/" class="navbar-brand logo">
+					<img src="/ot_fornest/static/src/img/logo.png" t-att-alt="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+				</a>
+			</xpath>
+		</template>
+
+		<!-- Change Sign In Position -->
+		<template id="website.show_sign_in" customize_show="True" inherit_id="website.layout" name="Show Sign In">
+			<xpath expr="//ul[@id='top_menu']" position="inside">
+				<li groups="base.group_public">
+					<a t-attf-href="/web/login">
+						<i class="fa fa-sign-in"></i>
+						<b>Sign in</b>
+					</a>
+				</li>
+			</xpath>
+		</template>
+
+		<!-- Allow Search in Any Page -->
+		<template id="website_sale.search" name="Search hidden fields">
+			<t t-if="category">
+				<form t-att-action="keep('/shop'+ ('/category/'+slug(category)) if category else '', search=0)" method="get" t-att-class="search_class">
+
+					<t t-if="attrib_values">
+						<t t-foreach="attrib_values" t-as="a">
+							<input type="hidden" name="attrib" t-att-value="'%s-%s' % (a[0], a[1])"/>
+						</t>
+					</t>
+					<div class="input-group">
+						<input type="text" name="search" class="search-query form-control" placeholder="Search..." t-att-value="search"/>
+						<span class="input-group-btn">
+							<a class="btn btn-default a-submit"><i class="fa fa-search"/></a>
+						</span>
+					</div>
+				</form>
+			</t>
+
+			<t t-if="not category">
+				<form action="/shop" method="get" t-att-class="search_class">
+
+					<t t-if="attrib_values">
+						<t t-foreach="attrib_values" t-as="a">
+							<input type="hidden" name="attrib" t-att-value="'%s-%s' % (a[0], a[1])"/>
+						</t>
+					</t>
+					<div class="input-group">
+						<input type="text" name="search" class="search-query form-control" placeholder="Search..." t-att-value="search"/>
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-default a-submit"><i class="fa fa-search"/></button>
+						</span>
+					</div>
+				</form>
+			</t>
+		</template>
+
+		<!-- Change Main Layout -->
+		<template id="ot_layout" inherit_id="website.layout" name="OT Layout" priority="1">
+			<xpath expr="//div[@class='navbar navbar-default navbar-static-top']" position="replace">
+				<div class="navbar navbar-default navbar-static-top ot-fixed-header">
+					<div class="container">
+						<div class="navbar-header col-lg-3 col-md-3 col-sm-12 col-xs-12">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-top-collapse">
+									<span class="sr-only">Toggle navigation</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+							</button>
+							<a class="navbar-brand" href="/" t-field="res_company.name"/>
+						</div>
+						<t t-call="website_sale.search">
+							<t t-set="search_class">ot-navbar-search col-lg-4 col-md-3 col-sm-5 col-xs-12</t>
+						</t>
+
+						<div class="collapse navbar-collapse navbar-top-collapse ot-sub-menu">
+							<ul class="nav navbar-nav navbar-right col-lg-5 col-md-6 col-sm-7 col-xs-12" id="top_menu">
+								<li></li>
+								<t t-if="website.user_id != user_id">
+									<!-- OT Remarks - All logout form should contain li[@id='o_logout'] -->
+									<li id='o_logout'>
+										<a t-attf-href="/web/session/logout?redirect=/">
+											<i class="fa fa-sign-out"></i>
+											Logout
+										</a>
+									</li>
+								</t>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="navbar navbar-default navbar-static-top">
+					<div class="container">
+						<div class="clearfix"/>
+
+						<div class="collapse navbar-collapse navbar-top-collapse ot-main-menu">
+							<ul class="nav navbar-nav">
+								<t t-foreach="website.menu_id.child_id" t-as="submenu">
+									<t t-call="website.submenu"/>
+								</t>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</xpath>
+
+			<xpath expr="//div[@id='wrapwrap']" position="after">
+				<a href="#" class="ot-top">Top</a>
+			</xpath>
+		</template>
+
+		<!-- Change Cart Position -->
+		<template id="website_sale.header" inherit_id="website.layout" name="Header Shop My Cart Link" priority="2">
+			<xpath expr="//header//ul[@id='top_menu']/li" position="replace">
+				<t t-set="website_sale_order" t-value="website.sale_get_order()"/>
+				<li class="ot-my-cart">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<img src="/ot_fornest/static/src/img/cart.png" class="img img-responsive" alt="OT Cart"/> 
+						<sup t-attf-class="my_cart_quantity label label-primary" t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+					</a>
+					<ul t-att-class="'dropdown-menu ot-cart-content' if website.user_id != user_id else 'dropdown-menu ot-cart-content ot-left-cart'">
+						<t t-if="website_sale_order">
+							<t t-if="website_sale_order.order_line">
+								<div class="ot-cart-title">
+									<h4>My Cart</h4>
+								</div>
+								<div class="dropdown-cart">
+									<t t-foreach="website_sale_order.order_line" t-as="line">
+										<span align="center" t-if="line.product_id.product_tmpl_id">
+											<span class="ot-image-cart" t-field="line.product_id.image_small" t-field-options='{"widget": "image", "class": "img-rounded"}'/>
+										</span>
+										<span t-if="line.product_id.product_tmpl_id">
+											<span style="display: block">
+												<a t-attf-href="/shop/product/#{ slug(line.product_id.product_tmpl_id) }">
+													<strong t-esc="line.product_id.name_get()[0][1]"/>
+												</a>
+
+												<form action="/shop/cart/update" method="post" style="display: inline-block;">
+													<input name="remove_product_id" t-att-value="line.product_id.id" type="hidden"/>
+													<a class="ot-remove-product"><i class="fa fa-times"/></a>
+												</form>
+											</span>
+										</span>
+										<span class="text-center" name="price">
+											<t t-if="(line.price_unit - line.price_reduce) &gt; 1">
+												<del class="text-danger" style="white-space: nowrap;" t-field="line.price_unit" t-field-options='{"widget": "monetary", "from_currency": "website.currency_id", "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"}'/>&amp;nbsp;
+											</t>
+											<span t-esc="int(line.product_uom_qty)"/>
+											<span> x </span>
+											<span t-field="line.price_reduce" style="white-space: nowrap;" t-field-options='{"widget": "monetary", "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"}'/>
+										</span>
+										<div class="clearfix"/>
+									</t>
+								</div>
+
+								<div class="ot-total-amount">
+									<h4>Total: <span t-field="website_sale_order.amount_total" style="white-space: nowrap;" t-field-options='{"widget": "monetary", "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"}'/></h4>
+								</div>
+
+								<div class="ot-cart-action">
+									<a href="/shop/cart"><i class="fa fa-shopping-cart"/> My Cart</a>
+									<a t-if="not optional_products and website_sale_order and website_sale_order.website_order_line" href="/shop/checkout"><i class="fa fa-sign-out"/> Checkout</a>
+								</div>
+							</t>
+							<t t-if="not website_sale_order.order_line">
+								<div class="ot-cart-empty dropdown-cart">
+									<span>Your cart was empty.</span>
+								</div>
+							</t>
+						</t>
+
+						<t t-if="not website_sale_order">
+							<div class="ot-cart-empty dropdown-cart">
+								<span>Your cart was empty.</span>
+							</div>
+						</t>
+					</ul>
+				</li>
+			</xpath>
+		</template>
+
+		<!-- Homepage -->
+		<template id="website.homepage" name="Homepage">
+			<t t-call="website.layout">
+				<div id="wrap" class="js_sale oe_website_sale">
+					<div class="oe_structure"/>
+
+					<div class="carousel slide" id="ot-main-slider">
+						<ol class="carousel-indicators hidden-xs">
+							<li class="active" data-slide-to="0" data-target="#ot-main-slider"/>
+							<li data-slide-to="1" data-target="#ot-main-slider"/>
+						</ol>
+						<!-- <hr class="transition-timer-carousel-progress-bar" /> -->
+						<div class="carousel-inner" role="listbox">
+							<div class="item active">
+								<a href="/">
+									<img src="/ot_fornest/static/src/img/slide-1.jpg" alt="OT Slide"/>
+								</a>
+							</div>
+							<div class="item">
+								<a href="/">
+									<img src="/ot_fornest/static/src/img/slide-blank.png" alt="OT Blank Slide"/>
+								</a>
+							</div>
+						</div>
+				
+						<div class="carousel-control left" data-slide="prev" data-target="#ot-main-slider" href="#ot-main-slider" style="width: 10%">
+							<i class="fa fa-chevron-left"/>
+						</div>
+						<div class="carousel-control right" data-slide="next" data-target="#ot-main-slider" href="#ot-main-slider" style="width: 10%">
+							<i class="fa fa-chevron-right"/>
+						</div>
+					</div>
+
+					<div class="oe_structure"/>
+
+					<div class="ot-sale-row">
+						<div class="container">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<img src="/ot_fornest/static/src/img/shop-1.jpg" alt="Shop Discount" class="img img-responsive"/>
+							</div>
+
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<img src="/ot_fornest/static/src/img/shop-2.jpg" alt="Shop Brand" class="img img-responsive"/>
+							</div>
+						</div>
+					</div>
+
+					<div class="oe_structure"/>
+
+					<div class="ot-featured-brand">
+						<div class="container text-center">
+							<h3>Featured Brand</h3>
+							<ul>
+								<li><img src="/ot_fornest/static/src/img/brand-1.png" alt="Brand 1" class="img img-responsive"/></li>
+								<li><img src="/ot_fornest/static/src/img/brand-2.png" alt="Brand 2" class="img img-responsive"/></li>
+								<li><img src="/ot_fornest/static/src/img/brand-3.png" alt="Brand 3" class="img img-responsive"/></li>
+								<li><img src="/ot_fornest/static/src/img/brand-4.png" alt="Brand 4" class="img img-responsive"/></li>
+								<li><img src="/ot_fornest/static/src/img/brand-5.png" alt="Brand 5" class="img img-responsive"/></li>
+								<li><img src="/ot_fornest/static/src/img/brand-6.png" alt="Brand 6" class="img img-responsive"/></li>
+							</ul>
+							<ul>
+								<li><img src="/ot_fornest/static/src/img/brand-7.png" alt="Brand 7" class="img img-responsive"/></li>
+								<li><img src="/ot_fornest/static/src/img/brand-8.png" alt="Brand 8" class="img img-responsive"/></li>
+								<li><img src="/ot_fornest/static/src/img/brand-9.png" alt="Brand 9" class="img img-responsive"/></li>
+								<li><img src="/ot_fornest/static/src/img/brand-10.png" alt="Brand 10" class="img img-responsive"/></li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="oe_structure"/>
+					
+					<div class="carousel slide" id="ot-sub-slider">
+						<ol class="carousel-indicators hidden-xs">
+							<li class="active" data-slide-to="0" data-target="#ot-sub-slider"/>
+							<li data-slide-to="1" data-target="#ot-sub-slider"/>
+						</ol>
+						<!-- <hr class="transition-timer-carousel-progress-bar" /> -->
+						<div class="carousel-inner" role="listbox">
+							<div class="item active">
+								<a href="/">
+									<img src="/ot_fornest/static/src/img/banner-1.png" alt="OT Sub Slide"/>
+								</a>
+							</div>
+							<div class="item">
+								<a href="/">
+									<img src="/ot_fornest/static/src/img/banner-blank.png" alt="OT Blank Sub Slide"/>
+								</a>
+							</div>
+						</div>
+				
+						<div class="carousel-control left" data-slide="prev" data-target="#ot-sub-slider" href="#ot-sub-slider" style="width: 10%">
+							<i class="fa fa-chevron-left"/>
+						</div>
+						<div class="carousel-control right" data-slide="next" data-target="#ot-sub-slider" href="#ot-sub-slider" style="width: 10%">
+							<i class="fa fa-chevron-right"/>
+						</div>
+					</div>
+
+					<div class="oe_structure"/>
+					<t t-if="ot_categ_1 or ot_categ_2 or ot_categ_3">
+						<div class="ot-products">
+							<div class="container" id="ot-products-tabs">
+								<h3 class="text-center">Our Products</h3>
+								<ul class="text-center">
+									<t t-if="ot_categ_1">
+										<li><a href="#ot-products-tabs-1"><t t-esc="company.ot_categ_1.name"/></a></li>
+									</t>
+									<t t-if="ot_categ_2">
+										<li><a href="#ot-products-tabs-2"><t t-esc="company.ot_categ_2.name"/></a></li>
+									</t>
+									<t t-if="ot_categ_3">
+										<li><a href="#ot-products-tabs-3"><t t-esc="company.ot_categ_3.name"/></a></li>
+									</t>
+								</ul>
+
+								<div id="products_grid">
+									<t t-if="ot_categ_1">
+										<div id="ot-products-tabs-1">
+											<table width="100%" class="text-center">
+											<tbody>
+												<tr t-foreach="ot_categ_1" t-as="tr_product">
+												<t t-foreach="tr_product" t-as="td_product">
+												<t t-if="td_product">
+													<t t-set="product" t-value="td_product['product']" />
+													<td t-att-colspan="td_product['x'] != 1 and td_product['x']" t-att-rowspan="td_product['y'] != 1 and td_product['y']" t-attf-class="oe_product oe_grid oe-height-#{td_product['y']*2} #{ td_product['class'] }">
+													<div class="oe_product_cart" t-att-data-publish="product.website_published and 'on' or 'off'">
+														<div class="css_options" t-ignore="true" groups="base.group_website_publisher">
+														<div t-attf-class="dropdown js_options" t-att-data-id="product.id">
+															<button class="btn btn-default" t-att-id="'dopprod-%s' % product.id" role="button" data-toggle="dropdown">
+															Options
+															<span class="caret" />
+															</button>
+															<ul class="dropdown-menu" role="menu" t-att-aria-labelledby="'dopprod-%s' % product.id">
+															<li class="dropdown-submenu">
+																<a tabindex="-1" href="#">Size</a>
+																<ul class="dropdown-menu" name="size">
+																<li>
+																	<a href="#">
+																	<table>
+																		<tr>
+																		<td class="selected" />
+																		<td t-att-class="product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																		<tr>
+																		<td t-att-class="product.website_size_y &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 1 and product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 1 and product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 1 and product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																		<tr>
+																		<td t-att-class="product.website_size_y &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 2 and product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 2 and product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 2 and product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																		<tr>
+																		<td t-att-class="product.website_size_y &gt; 3 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 3 and product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 3 and product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 3 and product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																	</table>
+																	</a>
+																</li>
+																</ul>
+															</li>
+															<li class="dropdown-submenu">
+																<a tabindex="-1" href="#">Styles</a>
+																<ul class="dropdown-menu" name="style">
+																<t t-foreach="styles" t-as="style">
+																	<li t-att-class="style_in_product(style, product) and 'active' or ''">
+																	<a href="#" t-att-data-id="style.id" t-att-data-class="style.html_class">
+																		<t t-esc="style.name" />
+																	</a>
+																	</li>
+																</t>
+																</ul>
+															</li>
+															<li class="dropdown-submenu">
+																<a tabindex="-1" href="#">Promote</a>
+																<ul class="dropdown-menu" name="sequence">
+																<li>
+																	<a href="#" class="js_go_to_top">Push to top</a>
+																</li>
+																<li>
+																	<a href="#" class="js_go_up">Push up</a>
+																</li>
+																<li>
+																	<a href="#" class="js_go_down">Push down</a>
+																</li>
+																<li>
+																	<a href="#" class="js_go_to_bottom">Push to bottom</a>
+																</li>
+																</ul>
+															</li>
+															</ul>
+														</div>
+														</div>
+														<t t-set="product_image_big" t-value="td_product['x']+td_product['y'] &gt; 2" />
+														<t t-call="website_sale.products_item" />
+													</div>
+													</td>
+												</t>
+												</t>
+												</tr>
+											</tbody>
+											</table>
+										</div>
+									</t>
+
+									<t t-if="ot_categ_2">
+										<div id="ot-products-tabs-2">
+											<table width="100%" class="text-center">
+											<tbody>
+												<tr t-foreach="ot_categ_2" t-as="tr_product">
+												<t t-foreach="tr_product" t-as="td_product">
+												<t t-if="td_product">
+													<t t-set="product" t-value="td_product['product']" />
+													<td t-att-colspan="td_product['x'] != 1 and td_product['x']" t-att-rowspan="td_product['y'] != 1 and td_product['y']" t-attf-class="oe_product oe_grid oe-height-#{td_product['y']*2} #{ td_product['class'] }">
+													<div class="oe_product_cart" t-att-data-publish="product.website_published and 'on' or 'off'">
+														<div class="css_options" t-ignore="true" groups="base.group_website_publisher">
+														<div t-attf-class="dropdown js_options" t-att-data-id="product.id">
+															<button class="btn btn-default" t-att-id="'dopprod-%s' % product.id" role="button" data-toggle="dropdown">
+															Options
+															<span class="caret" />
+															</button>
+															<ul class="dropdown-menu" role="menu" t-att-aria-labelledby="'dopprod-%s' % product.id">
+															<li class="dropdown-submenu">
+																<a tabindex="-1" href="#">Size</a>
+																<ul class="dropdown-menu" name="size">
+																<li>
+																	<a href="#">
+																	<table>
+																		<tr>
+																		<td class="selected" />
+																		<td t-att-class="product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																		<tr>
+																		<td t-att-class="product.website_size_y &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 1 and product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 1 and product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 1 and product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																		<tr>
+																		<td t-att-class="product.website_size_y &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 2 and product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 2 and product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 2 and product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																		<tr>
+																		<td t-att-class="product.website_size_y &gt; 3 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 3 and product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 3 and product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 3 and product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																	</table>
+																	</a>
+																</li>
+																</ul>
+															</li>
+															<li class="dropdown-submenu">
+																<a tabindex="-1" href="#">Styles</a>
+																<ul class="dropdown-menu" name="style">
+																<t t-foreach="styles" t-as="style">
+																	<li t-att-class="style_in_product(style, product) and 'active' or ''">
+																	<a href="#" t-att-data-id="style.id" t-att-data-class="style.html_class">
+																		<t t-esc="style.name" />
+																	</a>
+																	</li>
+																</t>
+																</ul>
+															</li>
+															<li class="dropdown-submenu">
+																<a tabindex="-1" href="#">Promote</a>
+																<ul class="dropdown-menu" name="sequence">
+																<li>
+																	<a href="#" class="js_go_to_top">Push to top</a>
+																</li>
+																<li>
+																	<a href="#" class="js_go_up">Push up</a>
+																</li>
+																<li>
+																	<a href="#" class="js_go_down">Push down</a>
+																</li>
+																<li>
+																	<a href="#" class="js_go_to_bottom">Push to bottom</a>
+																</li>
+																</ul>
+															</li>
+															</ul>
+														</div>
+														</div>
+														<t t-set="product_image_big" t-value="td_product['x']+td_product['y'] &gt; 2" />
+														<t t-call="website_sale.products_item" />
+													</div>
+													</td>
+												</t>
+												</t>
+												</tr>
+											</tbody>
+											</table>
+										</div>
+									</t>
+
+									<t t-if="ot_categ_3">
+										<div id="ot-products-tabs-3">
+											<table width="100%" class="text-center">
+											<tbody>
+												<tr t-foreach="ot_categ_3" t-as="tr_product">
+												<t t-foreach="tr_product" t-as="td_product">
+												<t t-if="td_product">
+													<t t-set="product" t-value="td_product['product']" />
+													<td t-att-colspan="td_product['x'] != 1 and td_product['x']" t-att-rowspan="td_product['y'] != 1 and td_product['y']" t-attf-class="oe_product oe_grid oe-height-#{td_product['y']*2} #{ td_product['class'] }">
+													<div class="oe_product_cart" t-att-data-publish="product.website_published and 'on' or 'off'">
+														<div class="css_options" t-ignore="true" groups="base.group_website_publisher">
+														<div t-attf-class="dropdown js_options" t-att-data-id="product.id">
+															<button class="btn btn-default" t-att-id="'dopprod-%s' % product.id" role="button" data-toggle="dropdown">
+															Options
+															<span class="caret" />
+															</button>
+															<ul class="dropdown-menu" role="menu" t-att-aria-labelledby="'dopprod-%s' % product.id">
+															<li class="dropdown-submenu">
+																<a tabindex="-1" href="#">Size</a>
+																<ul class="dropdown-menu" name="size">
+																<li>
+																	<a href="#">
+																	<table>
+																		<tr>
+																		<td class="selected" />
+																		<td t-att-class="product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																		<tr>
+																		<td t-att-class="product.website_size_y &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 1 and product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 1 and product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 1 and product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																		<tr>
+																		<td t-att-class="product.website_size_y &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 2 and product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 2 and product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 2 and product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																		<tr>
+																		<td t-att-class="product.website_size_y &gt; 3 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 3 and product.website_size_x &gt; 1 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 3 and product.website_size_x &gt; 2 and 'selected'" />
+																		<td t-att-class="product.website_size_y &gt; 3 and product.website_size_x &gt; 3 and 'selected'" />
+																		</tr>
+																	</table>
+																	</a>
+																</li>
+																</ul>
+															</li>
+															<li class="dropdown-submenu">
+																<a tabindex="-1" href="#">Styles</a>
+																<ul class="dropdown-menu" name="style">
+																<t t-foreach="styles" t-as="style">
+																	<li t-att-class="style_in_product(style, product) and 'active' or ''">
+																	<a href="#" t-att-data-id="style.id" t-att-data-class="style.html_class">
+																		<t t-esc="style.name" />
+																	</a>
+																	</li>
+																</t>
+																</ul>
+															</li>
+															<li class="dropdown-submenu">
+																<a tabindex="-1" href="#">Promote</a>
+																<ul class="dropdown-menu" name="sequence">
+																<li>
+																	<a href="#" class="js_go_to_top">Push to top</a>
+																</li>
+																<li>
+																	<a href="#" class="js_go_up">Push up</a>
+																</li>
+																<li>
+																	<a href="#" class="js_go_down">Push down</a>
+																</li>
+																<li>
+																	<a href="#" class="js_go_to_bottom">Push to bottom</a>
+																</li>
+																</ul>
+															</li>
+															</ul>
+														</div>
+														</div>
+														<t t-set="product_image_big" t-value="td_product['x']+td_product['y'] &gt; 2" />
+														<t t-call="website_sale.products_item" />
+													</div>
+													</td>
+												</t>
+												</t>
+												</tr>
+											</tbody>
+											</table>
+										</div>
+									</t>
+								</div>
+							</div>
+						</div>
+					</t>
+					<t t-if="not ot_categ_1 and not ot_categ_2 and not ot_categ_3">
+						<div class="text-center text-muted">
+							<t groups="base.group_website_publisher">
+								<h3 class="css_editable_display">No categories defined.</h3>
+								<p groups="base.group_sale_manager">Add categories in <i>'OT Config'</i> to show it in Homepage.</p>
+							</t>
+						</div>
+					</t>
+					<div class="oe_structure"/>
+				</div>
+			</t>
+		</template>
+
+		<!-- Change Product View -->
+		<template id="website_sale.products_item" name="Product item">
+			<form action="/shop/cart/update" method="post" style="display: inline-block;">
+				<div itemscope="itemscope" itemtype="http://schema.org/Product">
+				<div class="ribbon-wrapper">
+					<div class="ribbon btn btn-danger">Sale</div>
+				</div>
+				<div class="oe_product_image">
+					<img itemprop="image" class="img img-responsive" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')"/>
+					<div class="ot-product-actions">
+						<a itemprop="url" class="ot-more-details" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']>1 else None))">
+							<i class="fa fa-file-text"/> More Details
+						</a>
+					</div>
+				</div>
+				<section class="text-center">
+					<h5><strong><a itemprop="name" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']>1 else None))" t-field="product.name"/></strong></h5>
+
+					<div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
+						<b>
+							<t t-if="(compute_currency(product.lst_price) - product.website_price ) &gt; 0.01  and website.get_current_pricelist().discount_policy=='without_discount'">
+								<del class="text-danger mr8" style="white-space: nowrap;" t-esc="compute_currency(product.website_public_price)" t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}" />
+							</t>
+
+							<span t-esc="product.website_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+							<span itemprop="price" style="display:none;" t-esc="product.website_price" />
+							<span itemprop="priceCurrency" style="display:none;" t-esc="website.currency_id.name" />
+						</b>
+					</div>
+				</section>
+				</div>
+			</form>
+		</template>
+
+		<!-- Change Add to Cart Position -->
+		<template id="website_sale.products_add_to_cart" inherit_id="website_sale.products_item" active="True" customize_show="True" name="Add to Cart">
+			<xpath expr="//a[@class='ot-more-details']" position="before">
+				<!-- OT Remarks - o10 is more sensitive -->
+				<input name="product_id" t-att-value="product.product_variant_id.id" type="hidden"/>
+				<a class="a-submit ot-add-product"><i class="fa fa-shopping-cart"/> Add to Cart</a>
+			</xpath>
+		</template>
+
+		<!-- Footer -->
+		<template id="website.footer_default" inherit_id="website.footer_custom" customize_show="True" name="Automatic Footer">
+			<xpath expr="//div[@id='footer']" position="replace">
+				<div class="ot-footer">
+					<div class="ot-footer-logo">
+						<img src="/ot_fornest/static/src/img/logo.png" class="img img-responsive"/>
+					</div>
+
+					<div class="container">
+						<div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+							<h4>COMPANY</h4>
+							<ul class="list-unstyled ot-company">
+								<li><a href="#">Home</a></li>
+								<li><a href="#">About Us</a></li>
+								<li><a href="#">Contact Us</a></li>
+								<li><a href="#">New Products</a></li>
+								<li><a href="#">All Products</a></li>
+							</ul>
+						</div>
+
+						<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+							<h4>CATEGORIES</h4>
+							<ul class="list-unstyled ot-categories">
+								<li><a href="#">Men</a></li>
+								<li><a href="#">Women</a></li>
+								<li><a href="#">Accessories</a></li>
+								<li><a href="#">Others</a></li>
+							</ul>
+						</div>
+
+						<div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+							<h4>FOLLOW US</h4>
+							<ul class="list-unstyled ot-follow-us">
+								<li>
+									<a href="#">
+										<img src="/ot_fornest/static/src/img/facebook.png" class="img img-responsive" alt="Facebook"/>
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<img src="/ot_fornest/static/src/img/instagram.png" class="img img-responsive" alt="Instagram"/>
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<img src="/ot_fornest/static/src/img/twitter.png" class="img img-responsive" alt="Twitter"/>
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<img src="/ot_fornest/static/src/img/google-plus.png" class="img img-responsive" alt="Google Plus"/>
+									</a>
+								</li>
+							</ul>
+						</div>
+
+						<div class="col-lg-5 col-md-4 col-sm-12 col-xs-12 ot-subscribe">
+							<h4>SUBSCRIBE NEWSLETTERS</h4>
+							<div>
+								<span>Join over 1.000 people who get free and fresh content delivered automatically each time we publish new products.</span>
+							</div>
+
+							<form action="#" name="subscribe" id="ot-subscribe-form" method="POST">
+								<input type="email" required="1" name="email" id="ot-subscribe-email" placeholder="Enter Your E-Mail"/>
+								<input type="submit" name="submit" value="Subscribe"/>
+							</form>
+						</div>
+					</div>
+				</div>
+			</xpath>
+		</template>
+
+		<!-- Copyright -->
+		<template id="website.layout_footer_copyright" inherit_id="website.layout" name="Footer Copyright">
+			<xpath expr="//footer" position="inside">
+				<div class="ot-copyright">
+					<div class="container text-center">
+						Copyright &amp;copy; 2016. <span t-field="res_company.name"/>. All Right Reserved. Made With <img src="/ot_fornest/static/src/img/logo.png" class="img img-responsive"/>
+					</div>
+				</div>
+			</xpath>
+		</template>
+
+		<!-- Single Product Images Slider -->
+		<template id="ot_product_images" inherit_id="website_sale.product" name="OT Product Images">
+			<xpath expr="//span[@t-field='product.image']" position="replace">
+				<div class="gallery-thumbs-container col-lg-3 col-md-3 col-sm-3 col-xs-3" t-if="len(product.product_images_ids) &gt; 0">
+					<ul id="gallery-thumbs" class="gallery-thumbs-list">
+						<li class="thumb-item">
+							<div class="thumb">
+								<a href="#"><span t-field="product.image" class="img-responsive" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-responsive&quot;}"/></a>
+							</div>
+						</li>
+						<t t-foreach="product.product_images_ids" t-as="i">
+							<li class="thumb-item">
+								<div class="thumb">
+									<a href="#"><img t-att-src="'/web/binary/image?model=ot.product.images&amp;field=image&amp;id=' + str(i.id)" class="img-responsive" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-responsive&quot;}"/></a>
+								</div>
+							</li>
+						</t>
+					</ul>
+				</div>
+			
+				<div t-att-class="'col-lg-9 col-md-9 col-sm-9 col-xs-9' if len(product.product_images_ids) &gt; 0 else 'col-lg-12 col-md-12 col-sm-12 col-xs-12'">
+					<ul class="bxslider">
+						<li><span t-field="product.image" class="img-responsive" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-responsive&quot;}"/></li>
+						<t t-foreach="product.product_images_ids" t-as="i">
+							<li><img t-att-src="'/web/binary/image?model=ot.product.images&amp;field=image&amp;id=' + str(i.id)" class="img-responsive" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-responsive&quot;}"/></li>
+						</t>
+					</ul>
+				</div>
+			</xpath>
+		</template>
+
+		<!-- Change Single Product Quantity Layout -->
+		<template id="website_sale.product_quantity" inherit_id="website_sale.product" customize_show="True" name="Select Quantity">
+			<xpath expr="//a[@id='add_to_cart']" position="before">
+				<!-- OT Remarks - CSS Qty is different in o9 -->
+				<div class="ot-qty-changer css_quantity input-group oe_website_spinner" contenteditable="false">
+					<input type="text" class="js_quantity form-control" data-min="1" name="add_qty" value="1"/>
+					<a t-attf-href="#" class="mb8 input-group-addon float_left js_add_cart_json">
+						<i class="fa fa-plus"></i>
+					</a>
+					<br/>
+					<a t-attf-href="#" class="mb8 input-group-addon js_add_cart_json">
+						<i class="fa fa-minus"></i>
+					</a>
+				</div>
+			</xpath>
+		</template>
+
+		<!-- Change Cart Product Quantity Layout -->
+		<!-- OT Remarks - Cart for website_spinner is changed in v9 -->
+		<template id="ot_cart_quantity" inherit_id="website_sale.cart_lines" name="OT Cart Quantity">
+			<xpath expr="//div[@class='input-group oe_website_spinner']" position="replace">
+				<div class="ot-qty-changer input-group oe_website_spinner">
+					<input type="text" class="js_quantity form-control"
+						t-att-data-line-id="line.id" 
+						t-att-data-product-id="line.product_id.id"
+						t-att-value="int(line.product_uom_qty)"/>
+					<a t-attf-href="#" class="mb8 input-group-addon float_left js_add_cart_json">
+						<i class="fa fa-plus"></i>
+					</a>
+					<br/>
+					<a t-attf-href="#" class="mb8 input-group-addon js_add_cart_json">
+						<i class="fa fa-minus"></i>
+					</a>
+				</div>
+			</xpath>
+		</template>
+
+		<!-- Centering Products -->
+		<template id="forest_products_center" inherit_id="website_sale.products" name="Centering Products">
+			<xpath expr="//table[@width='100%']" position="attributes">
+				<attribute name="class">text-center</attribute>
+			</xpath>
+			<xpath expr="//t[@t-call='website_sale.search']" position="replace">
+				<!-- Remove Products Search -->
+			</xpath>
+		</template>
+
+		<!-- Single Product -->
+		<template id="website_sale.product" name="Product">
+			<t t-call="website.layout">
+				<t t-set="additional_title" t-value="product.name"/>
+				<div itemscope="itemscope" itemtype="http://schema.org/Product" id="wrap" class="js_sale ot-single-product">
+
+					<section class="container mt8">
+						<div class="row">
+							<div class="col-sm-5">
+								<ol class="breadcrumb">
+									<li><a t-att-href="keep(category=0)" onclick="history.go(-1); return false;">Products</a></li>
+									<li t-if="category"><a t-att-href="keep('/shop/category/%s' % slug(category), category=0)" t-field="category.name"/></li>
+									<li class="active"><span t-field="product.name"/></li>
+								</ol>
+							</div>
+							<!-- <div class="col-sm-3">
+								<t t-call="website_sale.search"><t t-set="search_class">pull-right</t></t>
+							</div> -->
+							<div class="col-sm-7" groups="base.group_sale_manager">
+								<t t-call="website.publish_management">
+									<t t-set="object" t-value="product"/>
+									<t t-set="publish_edit" t-value="True"/>
+									<t t-set="action" t-value="'product.product_template_action'"/>
+								</t>
+							</div>
+						</div>
+					</section>
+
+					<section t-attf-class="container oe_website_sale #{(compute_currency(product.lst_price) - product.price) &gt; 0.1 and 'discount'}" id="product_detail">
+						<div class="row">
+							<div class="col-xs-12 col-sm-5 col-md-5 col-lg-5 ot-product-images">
+								<span itemprop="image" t-field="product.image" t-field-options='{"widget": "image", "class": "product_detail_img"}'/>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+								<h1 itemprop="name" t-field="product.name">Product Name</h1>
+								<span itemprop="url" style="display:none;" t-esc="'/shop/product/%s' % slug(product)"/>
+
+								<t t-if="product.description_sale">
+									<div><p t-field="product.description_sale" class="text-muted"/></div>
+									<hr t-if="product.description_sale"/>
+								</t>
+								
+								<t t-call="website_sale.product_price"/>
+								<hr/>
+
+								<form t-att-action="keep('/shop/cart/update')" class="js_add_cart_variants" method="POST">
+									<!-- OT Remarks - o10 is more sensitive -->
+									<div class="js_product" t-if="product.product_variant_ids">
+										<t t-placeholder="select">
+											<input type="hidden" class="product_id" name="product_id" t-att-value="product.product_variant_id.id if len(product.product_variant_ids) == 1 else '0'" /> 
+											<t t-call="website_sale.variants">
+												<t t-set="ul_class" t-value="'nav-stacked'"/>
+											</t>
+										</t>
+
+										<p t-if="len(product.product_variant_ids) > 1" class="css_not_available_msg bg-danger" style="padding: 15px;">Product not available</p>
+
+										<a id="add_to_cart" class="btn btn-primary btn-lg js_check_product a-submit ot-add-product" href="#">Add to Cart</a>
+									</div>
+
+								</form>
+							</div>
+							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+								<div class="ot-desc-block">
+									<div>
+										<i class="fa fa-usd"/>
+										<h4>MONEY BACK GUARANTEE</h4>
+										<p>30-day money-back guarantee</p>
+									</div>
+									<div>
+										<i class="fa fa-truck"/>
+										<h4>FREE SHIPPING</h4>
+										<p>Free Shipping in U.S.</p>
+									</div>
+									<div>
+										<i class="fa fa-clock-o"/>
+										<h4>BUY NOW</h4>
+										<p>Buy now, get in 2 days</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<div itemprop="description" t-field="product.website_description" class="oe_structure mt16" id="product_full_description"/>
+
+				</div>
+			</t>
+		</template>
+
+		<!-- Product Attributes Modal -->
+		<template id="ot_product_attributes" name="Product Attributes Option">
+			<div class="modal ot-modal-attributes fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+							<h4 class="modal-title text-center" id="myModalLabel">Product Attributes</h4>
+						</div>
+						<div class="modal-body">
+							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 ot-product-images">
+								<div class="gallery-thumbs-container col-lg-3 col-md-3 col-sm-3 col-xs-3" t-if="len(product.product_images_ids) &gt; 0">
+									<ul id="gallery-thumbs" class="gallery-thumbs-list">
+										<li class="thumb-item">
+											<div class="thumb">
+												<a href="#"><span t-field="product.image" class="img-responsive" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-responsive&quot;}"/></a>
+											</div>
+										</li>
+										<t t-foreach="product.product_images_ids" t-as="i">
+											<li class="thumb-item">
+												<div class="thumb">
+													<a href="#"><img t-att-src="'/web/binary/image?model=ot.product.images&amp;field=image&amp;id=' + str(i.id)" class="img-responsive" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-responsive&quot;}"/></a>
+												</div>
+											</li>
+										</t>
+									</ul>
+								</div>
+							
+								<div t-att-class="'col-lg-9 col-md-9 col-sm-9 col-xs-9' if len(product.product_images_ids) &gt; 0 else 'col-lg-12 col-md-12 col-sm-12 col-xs-12'">
+									<ul class="bxslider">
+										<li><span t-field="product.image" class="img-responsive" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-responsive&quot;}"/></li>
+										<t t-foreach="product.product_images_ids" t-as="i">
+											<li><img t-att-src="'/web/binary/image?model=ot.product.images&amp;field=image&amp;id=' + str(i.id)" class="img-responsive" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-responsive&quot;}"/></li>
+										</t>
+									</ul>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+								<h1 itemprop="name" t-field="product.name">Product Name</h1>
+								<span itemprop="url" style="display:none;" t-esc="'/shop/product/%s' % slug(product)"/>
+
+								<t t-if="product.description_sale">
+									<div><p t-field="product.description_sale" class="text-muted"/></div>
+									<hr t-if="product.description_sale"/>
+								</t>
+								
+								<t t-call="website_sale.product_price"/>
+								<hr/>
+
+								<form action="/shop/cart/update" class="js_add_cart_variants" method="POST">
+									<!-- OT Remarks - o10 is more sensi -->
+									<div class="js_product" t-if="product.product_variant_ids">
+										<t t-placeholder="select">
+											<input type="hidden" class="product_id" name="product_id" t-att-value="product.product_variant_id.id if len(product.product_variant_ids) >= 1 else '0'" />
+											<t t-call="website_sale.variants">
+												<t t-set="ul_class" t-value="'nav-stacked'"/>
+											</t>
+										</t>
+
+										<p t-if="len(product.product_variant_ids) > 1" class="css_not_available_msg bg-danger" style="padding: 15px;">Product not available</p>
+
+										<!-- OT Remarks - CSS Qty different in o9 -->
+										<div class="ot-qty-changer css_quantity input-group oe_website_spinner" contenteditable="false">
+
+											<input type="text" class="js_quantity form-control" data-min="1" name="add_qty" value="1"/>
+
+											<a t-attf-href="#" class="mb8 input-group-addon float_left js_add_cart_json">
+												<i class="fa fa-plus"></i>
+											</a>
+											<br/>
+											<a t-attf-href="#" class="mb8 input-group-addon js_add_cart_json">
+												<i class="fa fa-minus"></i>
+											</a>
+										</div>
+
+										<a id="add_to_cart" class="btn btn-primary btn-lg js_check_product a-submit ot-add-product" href="#">Add to Cart</a>
+									</div>
+
+								</form>
+							</div>
+							<div class="clearfix"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+
+		<!-- Modal Subscribe -->
+		<template id="ot_subscribe" name="Subscribe">
+			<div class="modal ot-modal-subscribe fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-body text-center">
+							<t t-if="is_error">
+								<div>Email has already been submited before.</div>
+							</t>
+
+							<t t-if="not is_error">
+								<div>Your email has been submited.</div>
+								<div>HAPPY SHOPPING!</div>
+							</t>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+
+	</data>
+</openerp>

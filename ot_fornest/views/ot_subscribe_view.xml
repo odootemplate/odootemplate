@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="view_ot_subscribe_tree" model="ir.ui.view">
+			<field name="name">ot.subscribe.tree</field>
+			<field name="model">ot.subscribe</field>
+			<field name="arch" type="xml">
+				<tree string="Subscribers">
+					<field name="name"/>
+					<field name="date"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_ot_subscribe_form" model="ir.ui.view">
+			<field name="name">ot.subscribe.form</field>
+			<field name="model">ot.subscribe</field>
+			<field name="arch" type="xml">
+				<form string="Subscribers">
+					<group colspan="4">
+						<field name="name" required="1" />
+						<field name="date" required="1" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_ot_subscribe" model="ir.actions.act_window">
+			<field name="name">OT Subscribers</field>
+			<field name="res_model">ot.subscribe</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<!-- OT Remarks - v10 got different parent -->
+		<menuitem name="OT Subscribers" id="menu_ot_subscribers" parent="sales_team.menu_sales" action="action_ot_subscribe"/>
+	</data>
+</odoo>

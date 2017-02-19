@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="ot_product_images_tree_view" model="ir.ui.view">
+			<field name="name">ot.product.images.tree</field>
+			<field name="model">ot.product.images</field>
+			<field name="arch" type="xml">
+				<tree string="Product Images">
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="ot_product_images_form_view" model="ir.ui.view">
+			<field name="name">ot.product.images.form</field>
+			<field name="model">ot.product.images</field>
+			<field name="arch" type="xml">
+				<form string="Product Images">
+					<field name="name" required="1"/>
+					<field name="image" widget="image" required="1"/>
+				</form>
+			</field>
+		</record>
+	</data>
+</odoo>
