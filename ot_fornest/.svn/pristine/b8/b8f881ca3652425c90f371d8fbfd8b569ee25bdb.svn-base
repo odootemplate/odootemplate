@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<menuitem id="menu_ot_configuration" name="OT Config" sequence="200"/>
+
+		<record id="ot_config_settings_form_view" model="ir.ui.view">
+			<field name="name">ot.config.settings.form</field>
+			<field name="model">ot.config.settings</field>
+			<field name="arch" type="xml">
+				<form string="Configuration" class="oe_form_configuration">
+					<header>
+						<button string="Apply" type="object" name="execute" class="oe_highlight"/>
+						or
+						<button string="Cancel" type="object" name="cancel" class="oe_link"/>
+					</header>
+
+					<field name="company_id" on_change="on_change_company_id(company_id)" invisible="1"/>
+
+					<separator string="Home Category"/>
+					<group col="4">
+						<field name="ot_categ_1" colspan="4"/>
+						<field name="ot_categ_2"/>
+						<field name="ot_categ_3"/>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_ot_main_configuration" model="ir.actions.act_window">
+			<field name="name">Home Category</field>
+			<field name="res_model">ot.config.settings</field>
+			<field name="view_mode">form</field>
+			<field name="target">inline</field>
+		</record>
+
+		<menuitem id="menu_ot_configuration_title" parent="menu_ot_configuration" name="Configuration"/>
+		<menuitem id="menu_ot_main_configuration" action="action_ot_main_configuration" parent="menu_ot_configuration_title" name="Home Category"/>
+		
+	</data>
+</openerp>

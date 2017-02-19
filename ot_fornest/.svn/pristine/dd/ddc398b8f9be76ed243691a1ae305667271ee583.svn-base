@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="0">
+		<record id="seq_type_otproduct_images" model="ir.sequence.type">
+			<field name="name">Product Images</field>
+			<field name="code">ot.product.images</field>
+		</record>
+		<record id="seq_ot_product_images" model="ir.sequence">
+			<field name="name">Product Images</field>
+			<field name="code">ot.product.images</field>
+			<field name="prefix">OTI</field>
+			<field name="padding">4</field>
+		</record>
+	</data> 
+</openerp>
