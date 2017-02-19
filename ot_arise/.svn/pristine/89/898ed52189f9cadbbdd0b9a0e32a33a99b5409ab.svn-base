@@ -1,0 +1,64 @@
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Professional Design</h2>
+        <div class="oe_span12">
+            <p class="oe_mt32">
+                <img class="img img-responsive" src="full.png"><br/><br/>
+Professional design to present your professional website in your ERP system.
+            </p>
+        </div>
+    </div>
+</section> 
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan">Responsive</h2>
+        </div>
+        <div class="oe_span6">
+            <div class="oe_demo oe_picture oe_screenshot">
+                <img src="responsive.png" class="img img-responsive">
+            </div>
+        </div>
+        <div class="oe_span6">
+            <p class="oe_mt32">
+Your Odoo site will be fully responsive and quickly adapt to any gadget and screen size.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Professional Footer</h2>
+        <div class="oe_span6">
+            <p class="oe_mt32">
+Beautiful fixed footer with your company background as your trademark.
+            </p>
+        </div>
+        <div class="oe_span6">
+            <div class="oe_row_img oe_centered">
+                <img class="img img-responsive" src="footer.png">
+            </div>
+        </div>
+    </div>
+</section>  
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan">Ajax Subscription</h2>
+        </div>
+        <div class="oe_span6">
+            <div class="oe_demo oe_picture oe_screenshot">
+                <img class="img img-responsive" src="subscription.png">
+            </div>
+        </div>
+        <div class="oe_span6">
+            <p class="oe_mt32">
+Let your visitor subscribe to your web with elegant ajax interface.
+            </p>
+        </div>
+    </div>
+</section>
+

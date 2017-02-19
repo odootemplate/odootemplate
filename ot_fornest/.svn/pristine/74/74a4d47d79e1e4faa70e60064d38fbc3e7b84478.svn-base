@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ot_product_images,ot.product.images,model_ot_product_images,,1,1,1,1
+access_ot_subscribe,ot.subscribe,model_ot_subscribe,,1,1,1,1
